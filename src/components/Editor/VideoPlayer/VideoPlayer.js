@@ -55,7 +55,7 @@ function VideoPlayer() {
   const [videoDuration, setVideoDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [toggleMergeBox, setToggleMergeBox] = useState(false);
-  const [toggleTextBox,setToggleTextBox] = useState(false)
+  const [toggleTextBox, setToggleTextBox] = useState(false);
   const [trimA, setTrimA] = useState(0);
   const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
@@ -112,8 +112,8 @@ function VideoPlayer() {
   };
 
   const handleToggleText = () => {
-    setToggleTextBox(prevStat => !prevStat)
-  }
+    setToggleTextBox((prevStat) => !prevStat);
+  };
 
   const handleChangeVideo = () => {
     setUserHasChoosenVideo(false);
@@ -253,7 +253,11 @@ function VideoPlayer() {
           </MergeButton>
 
           <TextButton>
-            <TitleOutlinedIcon onClick={handleToggleText} fontSize="large" sx={{ color: " #000000" }} />
+            <TitleOutlinedIcon
+              onClick={handleToggleText}
+              fontSize="large"
+              sx={{ color: " #000000" }}
+            />
             <ButtonText variant="body2">Text</ButtonText>
           </TextButton>
 
@@ -289,11 +293,13 @@ function VideoPlayer() {
                 sx={{ color: " #000000" }}
               />
             )}
-            <ButtonText variant="body2">Mute</ButtonText>
+            <ButtonText variant="body2">
+              {!isMuted ? "Mute" : "Unmute"}
+            </ButtonText>
           </MuteButton>
         </HelperButtonContainer>
 
-       {toggleTextBox && <TextDialog/>}
+        {toggleTextBox && <TextDialog />}
 
         <div>
           {!isTrimmingDone ? (
