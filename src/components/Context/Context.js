@@ -22,6 +22,7 @@ function ContextProvider(props) {
   const [isTrimmingDone, setIsTrimmingDone] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isMerged, setIsMerged] = useState(false);
+  const [isOpen,setIsOpen] = useState(false)
   const [textStartTime,setTextStartTime] = useState()
   const [endTextTime,setEndTextTime] = useState()
   const [renderTextOnVideo,setRenderTextOnVideo] = useState()
@@ -157,7 +158,7 @@ function ContextProvider(props) {
   };
 
   const handleAddText = async (e) => {
-    console.log("clicked")
+    setIsOpen(false)
     setIsNotLoading(false);
     // CAN BE MOORE OPTIMIZE BELOW
     try {
@@ -225,7 +226,9 @@ function ContextProvider(props) {
         endTextTime,
         renderTextOnVideo,
         select,
-        handleAddText
+        handleAddText,
+        isOpen,
+        setIsOpen
       }}
     >
       {props.children}

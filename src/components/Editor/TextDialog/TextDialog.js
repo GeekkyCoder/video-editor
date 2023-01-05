@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./TextDialog.css";
 import { DialogContainer, TextButton } from "./TextDialogStyles";
 import { Context } from "../../Context/Context";
+import { SettingsPowerRounded } from "@mui/icons-material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -60,27 +61,22 @@ export default function TextDialog() {
     endTextTime,
     renderTextOnVideo,
     select,
-    handleAddText
+    handleAddText,
+    isOpen,
+    setIsOpen
   } = React.useContext(Context);
 
-  const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
-    setOpen(false);
-  };
+     setIsOpen(false)
+  }
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Add Text
-      </Button>
       <BootstrapDialog
-        onClose={handleClose}
+      onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={isOpen}
       >
         <DialogContainer>
           <h3 className="heading">Add text to your video</h3>
@@ -138,9 +134,6 @@ export default function TextDialog() {
           </TextButton>
         </DialogContainer>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Okay
-          </Button>
         </DialogActions>
       </BootstrapDialog>
     </div>

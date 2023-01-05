@@ -55,7 +55,6 @@ function VideoPlayer() {
   const [videoDuration, setVideoDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [toggleMergeBox, setToggleMergeBox] = useState(false);
-  const [toggleTextBox, setToggleTextBox] = useState(false);
   const [trimA, setTrimA] = useState(0);
   const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
@@ -79,6 +78,8 @@ function VideoPlayer() {
     onChangeMergeVideo,
     isMerged,
     endValue,
+    setIsOpen,
+    isOpen
   } = useContext(Context);
 
   const handleSliderValues = (sliderValuesArray) => {
@@ -112,8 +113,12 @@ function VideoPlayer() {
   };
 
   const handleToggleText = () => {
-    setToggleTextBox((prevStat) => !prevStat);
+    setIsOpen(prevStat=> !prevStat)
   };
+
+  const handleMergeBox = () => {
+     setToggleMergeBox(prevStat=> !prevStat)
+  }
 
   const handleChangeVideo = () => {
     setUserHasChoosenVideo(false);
@@ -123,9 +128,6 @@ function VideoPlayer() {
     }, 1000);
   };
 
-  const handleToggleMergeBox = () => {
-    setToggleMergeBox((prevStat) => !prevStat);
-  };
 
   useEffect(() => {
     if (videoRef.current) {
@@ -240,12 +242,12 @@ function VideoPlayer() {
               fontSize="large"
               sx={{ color: " #000000" }}
             />
-            <ButtonText variant="body2">Change Video</ButtonText>
+            <ButtonText variant="body2">Change</ButtonText>
           </ChangeVideoButton>
 
           <MergeButton>
             <PostAddOutlinedIcon
-              onClick={handleToggleMergeBox}
+              onClick={handleMergeBox}
               fontSize="large"
               sx={{ color: " #000000" }}
             />
@@ -299,7 +301,7 @@ function VideoPlayer() {
           </MuteButton>
         </HelperButtonContainer>
 
-        {toggleTextBox && <TextDialog />}
+        {isOpen && <TextDialog />}
 
         <div>
           {!isTrimmingDone ? (
