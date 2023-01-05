@@ -40,6 +40,13 @@
   color: whitesmoke;
 }
 
+.flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .mode {
   margin-top: 1em;
 }

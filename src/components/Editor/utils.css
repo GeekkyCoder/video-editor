@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap");
+
 body {
   margin: 0;
   padding: 0;
@@ -11,6 +13,54 @@ body {
 .dark-mode {
   background-color: #071b2f;
   color: whitesmoke;
+}
+
+.merge-container {
+  width: 30%;
+}
+
+.merge-label {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.merge-file-input {
+  margin-left: 4em;
+  margin-top: 0.8em;
+  font-size: 1rem;
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.original-video-seconds-container,
+.trimmed-video-seconds-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Raleway", sans-serif;
+}
+
+.original-video-seconds-container .title,
+.trimmed-video-seconds-container .title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 0.7em;
+}
+
+.original-video-seconds-container .time,
+.trimmed-video-seconds-container .time {
+  color: red;
+}
+
+.calculate-trim-seconds{
+  margin-left: 1em;
+  color: limegreen;
+  font-weight: bold;
 }
 
 .icons-fade {

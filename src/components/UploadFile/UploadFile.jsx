@@ -14,7 +14,7 @@ const UploadFileComponent = () => {
   return (
     <div className={`wrapper ${theme}-mode`}>
       {isNotloading ? (
-        <div>
+        <div className="flex">
           <input
             onChange={onChangeVideo}
             type="file"

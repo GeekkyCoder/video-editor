@@ -3,6 +3,8 @@ import ReactPlayer from "react-player";
 import { Context } from "../Context/Context";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import Alert from "@mui/material/Alert";
+
 import {
   VideoEditorContainer,
   VideoContainer,
@@ -36,61 +38,59 @@ import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import TitleOutlinedIcon from "@mui/icons-material/TitleOutlined";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
+import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import SettingsIcon from "@mui/icons-material/Settings";
 import "./utils.css";
 import SuccessAlert from "./SuccessAlert";
-import { TroubleshootTwoTone } from "@mui/icons-material";
 
 function VideoPlayer() {
+  
+  const [sliderStartValue,setSliderStartValue] = useState(0)
+  const [sliderEndValue,setSliderEndValue] = useState(0)
+  const [videoDuration, setVideoDuration] = useState(0);
   const [trimA, setTrimA] = useState(0);
   const [trimB, setTrimB] = useState(0);
+  const videoRef = useRef(null);
+  const trimmingRef = useRef(null);
 
   const {
     theme,
     setThemeMode,
     choosenVideo,
     handleTrim,
+    startValue,
     setStartValue,
     setEndValue,
     isTrimmingDone,
     setIsTrimmingDone,
     isVideoPlaying,
     setIsVideoPlaying,
-    startValue,
-    endValue,
     setIsNotLoading,
     setUserHasChoosenVideo,
+    isNotloading,
+    onChangeMergeVideo,
+    isMerged,
+    endValue,
   } = useContext(Context);
 
-  const [handleStartValue, setHandleStartValue] = useState(0);
-  const [handleEndValue, setHandleEndValue] = useState(0);
-  const [videoProgress, setVideoProgress] = useState(0);
-  const [videoDuration, setVideoDuration] = useState(0);
-  const videoRef = useRef(null);
-  const trimmingRef = useRef(null);
 
   const handleSliderValues = (sliderValuesArray) => {
+    setIsVideoPlaying(false);
     const [startingIndex, endingIndex] = sliderValuesArray;
-    console.log(`${JSON.stringify(startingIndex.toFixed(2))}`);
-    setHandleStartValue(startingIndex);
-    setHandleEndValue(endingIndex);
+    setSliderStartValue(startingIndex)
+    setSliderEndValue(endingIndex)
+    // console.log(`${JSON.stringify(startingIndex.toFixed(2))}`);
     setStartValue(startingIndex);
     setEndValue(endingIndex);
-    if (isTrimmingDone) {
-      setTrimA(startingIndex);
-      setTrimB(endingIndex);
-      trimmingRef.current.seekTo(startingIndex);
-    }
-    // videoRef.current.seekTo(handleStartValue);
   };
 
-  // const handleAfterChangeValues = (sliderAfterValuesArray) => {
-  //   const [startingIndex,endingIndex] = sliderAfterValuesArray
+  const handlePlayClick = () => {
+    setIsVideoPlaying(true);
+  };
 
-  // }
-
-  // const handleSwitch = () => {
-  //   setIsTrimmingDone(true)
-  // }
+  const handlePauseClick = () => {
+    setIsVideoPlaying(false);
+  };
 
   const handleReset = () => {
     setIsTrimmingDone(false);
@@ -108,9 +108,12 @@ function VideoPlayer() {
     if (videoRef.current) {
       const duration = videoRef.current.getDuration() || 100;
       setVideoDuration(duration);
-      videoRef.current.seekTo(handleStartValue);
-      console.log(handleStartValue);
+      videoRef.current.seekTo(startValue);
       // console.log(`${handleStartValue}, ${handleEndValue}`)
+      if(isTrimmingDone){
+        setTrimA(sliderStartValue)
+        setTrimB(sliderEndValue)
+      }
     }
   });
 
@@ -152,6 +155,7 @@ function VideoPlayer() {
               width="100%"
               height={"100%"}
               controls
+              playing={isVideoPlaying}
             />
           ) : (
             <ReactPlayer
@@ -160,9 +164,32 @@ function VideoPlayer() {
               width="100%"
               height={"100%"}
               controls
+              playing={isVideoPlaying}
             />
           )}
         </VideoContainer>
+
+        {!isMerged ? (
+          <div className="merge-container">
+            <Alert severity="info" sx={{ width: "100%" }}>
+              Merge video ? <strong>choose a file 👇</strong>
+            </Alert>
+            {/* <label htmlFor="merge" className="merge-label">Merge with another video ? </label> */}
+            <input
+              onChange={onChangeMergeVideo}
+              type="file"
+              className="merge-file-input"
+              id="up_file"
+              name="merge"
+            />
+          </div>
+        ) : (
+          <div className="merge-container">
+            <Alert severity="success" sx={{ width: "100%" }}>
+              Video merged Successfully!
+            </Alert>
+          </div>
+        )}
 
         <HelperButtonContainer>
           <ChangeVideoButton>
@@ -187,11 +214,11 @@ function VideoPlayer() {
             />
             <ButtonText variant="body2">Trim</ButtonText>
           </TrimButton>
-
+          {/* 
           <MergeButton>
             <PostAddOutlinedIcon fontSize="large" sx={{ color: " #000000" }} />
             <ButtonText variant="body2">Merge</ButtonText>
-          </MergeButton>
+          </MergeButton> */}
 
           <ResetButton>
             <RestartAltOutlinedIcon
@@ -203,27 +230,41 @@ function VideoPlayer() {
           </ResetButton>
         </HelperButtonContainer>
 
-        {/* <div>
-          {!isTrimmingDone ? 
-          <div>
-             Original Video 
-             <br/>
-             <span>start:{`00:${JSON.stringify(startValue).slice(3)}`}</span>
-             <span>end: {`00:${JSON.stringify(endValue).slice(0,3)}`}</span>
-          </div>
-         : <div>
-         Triimed Video 
-             <br/>
-             <span>start:{`00:${JSON.stringify(startValue).slice(0,3)}`}</span>
-             <span>end: {`00:${JSON.stringify(startValue).slice(0,3)}`}</span>
-          </div>}
-        </div> */}
+        <div>
+          {!isTrimmingDone ? (
+            <div className="original-video-seconds-container">
+              <p className="title">Original Video</p>
+              <span className="time">{`00:${JSON.stringify(startValue).slice(0,3)}`}</span>
+              <span>-</span>
+              <span className="time">{`00:${JSON.stringify(endValue).slice(0,3)}`}</span>
+            </div>
+          ) : (
+            <div className="trimmed-video-seconds-container">
+              <p className="title">Trimmed Video</p>
+              <span className="time">{`00:${JSON.stringify(sliderStartValue).slice(0,3)}`}</span>
+              <span>-</span>
+              <span className="time">{`00:${JSON.stringify(sliderEndValue).slice(0,3)}`}</span>
+              <span className="calculate-trim-seconds">(00:{sliderEndValue - sliderStartValue} seconds)</span>
+
+            </div>
+          )}
+        </div>
 
         <SliderContainer>
           <PlayPauseIconContainer>
-            <PlayIcon fontSize="large" sx={{ color: "#914979" }} />
-
-            <PauseIcons fontSize="large" sx={{ color: "#914979" }} />
+            {!isVideoPlaying ? (
+              <PlayIcon
+                onClick={handlePlayClick}
+                fontSize="large"
+                sx={{ color: "#914979" }}
+              />
+            ) : (
+              <PauseIcons
+                onClick={handlePauseClick}
+                fontSize="large"
+                sx={{ color: "#914979" }}
+              />
+            )}
           </PlayPauseIconContainer>
           <SliderBox>
             {!isTrimmingDone ? (
@@ -268,7 +309,7 @@ function VideoPlayer() {
                   {
                     background: !isTrimmingDone
                       ? "linear-gradient(#DBDEF5,blue)"
-                      : "red",
+                      : "linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)",
                     height: "10px",
                   },
                 ]}

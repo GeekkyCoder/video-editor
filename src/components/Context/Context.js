@@ -19,10 +19,10 @@ function ContextProvider(props) {
   const [startValue, setStartValue] = useState(0);
   const [endValue, setEndValue] = useState(0);
   const [isTrimmingDone, setIsTrimmingDone] = useState(false);
-  const [isVideoPlaying,setIsVideoPlaying] = useState(false)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMerged,setIsMerged] = useState(false)
 
   const setThemeMode = () => {
-    console.log("clicked");
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
@@ -42,6 +42,7 @@ function ContextProvider(props) {
     loadFFmpeg();
   }, []);
 
+  // user choosing video file functionality
   const onChangeVideo = async (e) => {
     setUserHasChoosenVideo(true);
     setIsNotLoading(false);
@@ -59,14 +60,10 @@ function ContextProvider(props) {
     setIsNotLoading(true);
   };
 
+  // trim video functionality
   const handleTrim = async () => {
     console.log("trimming");
-    // setIsTrimmingDone(true)
     setIsNotLoading(false);
-    // let startTime = "00:00:00";
-    // let offset = "00:01:54";
-    // let offset = ((rEnd / 100) * videoMeta.duration - startTime).toFixed(2);
-    // CAN BE MOORE OPTIMIZE BELOW
     try {
       await ffmpeg.run(
         "-i",
@@ -84,8 +81,6 @@ function ContextProvider(props) {
 
       const data = ffmpeg.FS("readFile", storedVideo2);
       ffmpeg.FS("writeFile", storedVideo, data);
-      // ffmpeg.FS("unlink", storedVideo2);
-      // const data = ffmpeg.FS("readFile", storedVideo);
       const dataURL = await helpers.readFileAsBase64(
         new Blob([data.buffer], { type: "video/mp4" })
       );
@@ -94,11 +89,70 @@ function ContextProvider(props) {
       console.log(error);
     } finally {
       setIsNotLoading(true);
-      setIsTrimmingDone(true)
+      setIsTrimmingDone(true);
     }
   };
 
-  // console.log(`videoStart:00:${JSON.stringify((startValue)).slice(0,3)}  videoEnd: 00:${JSON.stringify((endValue)).slice(0,3)}`)
+  // merge video functionality
+  const onChangeMergeVideo = async (e) => {
+    setIsNotLoading(false);
+    setIsMerged(true)
+    console.log(e.target.files?.item(0));
+    ffmpeg.FS(
+      "writeFile",
+      "mergevideo.mp4",
+      await fetchFile(e.target.files?.item(0))
+    );
+    try {
+      await ffmpeg.run(
+        "-i",
+        storedVideo,
+        "-c",
+        "copy",
+        "-bsf:v",
+        "h264_mp4toannexb",
+        "-f",
+        "mpegts",
+        "mergeinput1.ts"
+      );
+      await ffmpeg.run(
+        "-i",
+        "mergevideo.mp4",
+        "-c",
+        "copy",
+        "-bsf:v",
+        "h264_mp4toannexb",
+        "-f",
+        "mpegts",
+        "mergeinput2.ts"
+      );
+
+      await ffmpeg.run(
+        "-i",
+        "concat:mergeinput1.ts|mergeinput2.ts",
+        "-c",
+        "copy",
+        "-bsf:a",
+        "aac_adtstoasc",
+        "mergeout.mp4"
+      );
+
+      const data = ffmpeg.FS("readFile", "mergeout.mp4");
+      const dataURL = await helpers.readFileAsBase64(
+        new Blob([data.buffer], { type: "video/mp4" })
+      );
+      setChoosenVideo(dataURL);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsNotLoading(true);
+      setTimeout(()=> {
+        setIsMerged(false)
+      },6000)
+    }
+  };
+
+  console.log(`videoStart:00:${JSON.stringify((startValue)).slice(0,3)}  videoEnd: 00:${JSON.stringify((endValue)).slice(0,3)}`)
 
   // console.log(`start:${startValue}, end:${endValue}`)
 
@@ -124,7 +178,9 @@ function ContextProvider(props) {
         setIsTrimmingDone,
         isVideoPlaying,
         setIsVideoPlaying,
-        setUserHasChoosenVideo
+        setUserHasChoosenVideo,
+        onChangeMergeVideo,
+        isMerged,
       }}
     >
       {props.children}
