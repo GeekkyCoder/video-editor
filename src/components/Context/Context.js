@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState, useRef } from "react";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import * as helpers from "../utils/Helpers";
 import fontFile from "../Editor/SourceSansPro-Regular.otf";
+import { render } from "@testing-library/react";
 
 const storedVideo = "userchoosenvideo.mp4";
 const storedVideo2 = "usertrimedvideo.mp4";
@@ -21,6 +22,11 @@ function ContextProvider(props) {
   const [isTrimmingDone, setIsTrimmingDone] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isMerged, setIsMerged] = useState(false);
+  const [textStartTime,setTextStartTime] = useState()
+  const [endTextTime,setEndTextTime] = useState()
+  const [renderTextOnVideo,setRenderTextOnVideo] = useState()
+  const [select,setSelect] = useState()
+
 
   const setThemeMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -150,14 +156,41 @@ function ContextProvider(props) {
     }
   };
 
-  console.log(
-    `videoStart:00:${JSON.stringify(startValue).slice(
-      0,
-      3
-    )}  videoEnd: 00:${JSON.stringify(endValue).slice(0, 3)}`
-  );
+  const handleAddText = async (e) => {
+    console.log("clicked")
+    setIsNotLoading(false);
+    // CAN BE MOORE OPTIMIZE BELOW
+    try {
+      await ffmpeg.run(
+        "-i",
+        storedVideo,
+        "-vf",
+        `drawtext=fontfile=myfont.otf:text='${renderTextOnVideo}':fontsize=40:fontcolor=white:${select}`,
+        "-codec:a",
+        "copy",
+        "-preset",
+        "ultrafast",
+        storedVideo2
+      );
+
+      const data = ffmpeg.FS("readFile", storedVideo2);
+      // ffmpeg.FS("writeFile", storedVideo, data);
+      // ffmpeg.FS("unlink", storedVideo2);
+      // const data = ffmpeg.FS("readFile", storedVideo);
+      const dataURL = await helpers.readFileAsBase64(
+        new Blob([data.buffer], { type: "video/mp4" })
+      );
+      setChoosenVideo(dataURL);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsNotLoading(true);
+    }
+  };
+
 
   // console.log(`start:${startValue}, end:${endValue}`)
+  // console.log(textStartTime,endTextTime,select,renderTextOnVideo)
 
   return (
     <Context.Provider
@@ -184,6 +217,15 @@ function ContextProvider(props) {
         setUserHasChoosenVideo,
         onChangeMergeVideo,
         isMerged,
+        setTextStartTime,
+        setEndTextTime,
+        setSelect,
+        setRenderTextOnVideo,
+        textStartTime,
+        endTextTime,
+        renderTextOnVideo,
+        select,
+        handleAddText
       }}
     >
       {props.children}
