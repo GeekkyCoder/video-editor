@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Context } from "./components/Context/Context";
-import Editor from "./components/Editor/Editor";
+import Editor from "./components/Editor/Editor/Editor";
 
 function App() {
   const {theme} = useContext(Context)

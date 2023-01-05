@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FileDrop } from "react-file-drop";
 import { Context } from "../Context/Context";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ModeContainer, SunIcon, MoonIcon } from "../Editor/VideoPlayerStyle";
+import { ModeContainer, SunIcon, MoonIcon } from "../Editor/VideoPlayer/VideoPlayerStyle";
 
 import "./uploadfile.css";
 
