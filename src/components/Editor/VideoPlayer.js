@@ -47,6 +47,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import "./utils.css";
 import SuccessAlert from "./SuccessAlert";
 import { CirularIconBox } from "./EditorStyle";
+import TextDialog from "./TextDialog/TextDialog";
 
 function VideoPlayer() {
   const [sliderStartValue, setSliderStartValue] = useState(0);
@@ -54,6 +55,7 @@ function VideoPlayer() {
   const [videoDuration, setVideoDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [toggleMergeBox, setToggleMergeBox] = useState(false);
+  const [toggleTextBox,setToggleTextBox] = useState(false)
   const [trimA, setTrimA] = useState(0);
   const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
@@ -108,6 +110,10 @@ function VideoPlayer() {
   const handleUnMute = () => {
     setIsMuted(false);
   };
+
+  const handleToggleText = () => {
+    setToggleTextBox(prevStat => !prevStat)
+  }
 
   const handleChangeVideo = () => {
     setUserHasChoosenVideo(false);
@@ -209,7 +215,6 @@ function VideoPlayer() {
             <Alert severity="info" sx={{ width: "100%" }}>
               Merge video ? <strong>choose a file 👇</strong>
             </Alert>
-            {/* <label htmlFor="merge" className="merge-label">Merge with another video ? </label> */}
             <input
               onChange={onChangeMergeVideo}
               type="file"
@@ -248,7 +253,7 @@ function VideoPlayer() {
           </MergeButton>
 
           <TextButton>
-            <TitleOutlinedIcon fontSize="large" sx={{ color: " #000000" }} />
+            <TitleOutlinedIcon onClick={handleToggleText} fontSize="large" sx={{ color: " #000000" }} />
             <ButtonText variant="body2">Text</ButtonText>
           </TextButton>
 
@@ -287,6 +292,8 @@ function VideoPlayer() {
             <ButtonText variant="body2">Mute</ButtonText>
           </MuteButton>
         </HelperButtonContainer>
+
+       {toggleTextBox && <TextDialog/>}
 
         <div>
           {!isTrimmingDone ? (
