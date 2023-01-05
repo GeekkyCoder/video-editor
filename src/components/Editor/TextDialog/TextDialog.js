@@ -8,8 +8,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import "./TextDialog.css"
-import {DialogContainer} from "./TextDialogStyles"
+import "./TextDialog.css";
+import { DialogContainer, TextButton } from "./TextDialogStyles";
+import { Context } from "../../Context/Context";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -50,6 +51,18 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function TextDialog() {
+  const {
+    setTextStartTime,
+    setEndTextTime,
+    setSelect,
+    setRenderTextOnVideo,
+    textStartTime,
+    endTextTime,
+    renderTextOnVideo,
+    select,
+    handleAddText
+  } = React.useContext(Context);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -77,6 +90,8 @@ export default function TextDialog() {
             <input
               type="text"
               placeholder="00:00:00"
+              value={textStartTime}
+              onChange={(e) => setTextStartTime(e.target.value)}
               //   onChange={(e) => setVStart(e.target.value)}
             />
           </div>
@@ -86,12 +101,14 @@ export default function TextDialog() {
             <input
               type="text"
               placeholder="00:00:00"
+              value={endTextTime}
+              onChange={(e) => setEndTextTime(e.target.value)}
               //   onChange={(e) => setVEnd(e.target.value)}
             />
           </div>
 
           <div className="select-container">
-            <select>
+            <select value={select} onChange={(e) => setSelect(e.target.value)}>
               <option value="x=(w-text_w)/2:y=h-th-10">Bottom center</option>
               <option value="x=w-tw-10:y=h-th-10">Bottom right</option>
               <option value="x=10:y=h-th-10">Bottom left</option>
@@ -106,15 +123,23 @@ export default function TextDialog() {
             <input
               type="text"
               placeholder="Here goes the text.."
-              //   onChange={(e) => setRenderTextVideo(e.target.value)}
+              value={renderTextOnVideo}
+              onChange={(e) => setRenderTextOnVideo(e.target.value)}
             />
           </div>
 
-          <button className="add-text-btn">Add Text</button>
+          <TextButton
+          onClick={handleAddText}
+            color="success"
+            variant="contained"
+            className="add-text-btn"
+          >
+            Add Text
+          </TextButton>
         </DialogContainer>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Okay
           </Button>
         </DialogActions>
       </BootstrapDialog>
