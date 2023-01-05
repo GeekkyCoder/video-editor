@@ -8,8 +8,8 @@ export const CirularIconBox = styled(Box)`
   min-height: 100vh;
 `;
 
-export const VideoBox = styled(Box)` 
- width: 100%;
- height: 500px;
- border: 2px solid red;
-`
+export const VideoBox = styled(Box)`
+  width: 100%;
+  height: 500px;
+  border: 2px solid red;
+`;

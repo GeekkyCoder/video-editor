@@ -20,7 +20,7 @@ function ContextProvider(props) {
   const [endValue, setEndValue] = useState(0);
   const [isTrimmingDone, setIsTrimmingDone] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [isMerged,setIsMerged] = useState(false)
+  const [isMerged, setIsMerged] = useState(false);
 
   const setThemeMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -96,7 +96,7 @@ function ContextProvider(props) {
   // merge video functionality
   const onChangeMergeVideo = async (e) => {
     setIsNotLoading(false);
-    setIsMerged(true)
+    setIsMerged(true);
     console.log(e.target.files?.item(0));
     ffmpeg.FS(
       "writeFile",
@@ -146,13 +146,16 @@ function ContextProvider(props) {
       console.log(error);
     } finally {
       setIsNotLoading(true);
-      setTimeout(()=> {
-        setIsMerged(false)
-      },6000)
+      setIsMerged(false);
     }
   };
 
-  console.log(`videoStart:00:${JSON.stringify((startValue)).slice(0,3)}  videoEnd: 00:${JSON.stringify((endValue)).slice(0,3)}`)
+  console.log(
+    `videoStart:00:${JSON.stringify(startValue).slice(
+      0,
+      3
+    )}  videoEnd: 00:${JSON.stringify(endValue).slice(0, 3)}`
+  );
 
   // console.log(`start:${startValue}, end:${endValue}`)
 

@@ -1,16 +1,14 @@
 import React, { useContext } from "react";
-// import "./editor.css"
 import { FileDrop } from "react-file-drop";
 import { Context } from "../Context/Context";
-import SettingsIcon from '@mui/icons-material/Settings';
-import {ModeContainer,SunIcon,MoonIcon} from "../Editor/VideoPlayerStyle"
-
-// import {createFFmpeg, fetchFile} from '@ffmpeg/ffmpeg'
+import SettingsIcon from "@mui/icons-material/Settings";
+import { ModeContainer, SunIcon, MoonIcon } from "../Editor/VideoPlayerStyle";
 
 import "./uploadfile.css";
 
 const UploadFileComponent = () => {
-  const { onChangeVideo, isNotloading,setThemeMode,theme } = useContext(Context);
+  const { onChangeVideo, isNotloading, setThemeMode, theme } =
+    useContext(Context);
   return (
     <div className={`wrapper ${theme}-mode`}>
       {isNotloading ? (
@@ -30,19 +28,22 @@ const UploadFileComponent = () => {
           </FileDrop>
 
           <ModeContainer className="mode" onClick={setThemeMode}>
-          {theme === "light" ? (
-            <SunIcon
-              className="icons-fade"
-              fontSize="large"
-              sx={{ color: "#FFC300" }}
-            />
-          ) : (
-            <MoonIcon className="icons-fade" fontSize="large" />
-          )}
-        </ModeContainer>
+            {theme === "light" ? (
+              <SunIcon
+                className="icons-fade"
+                fontSize="large"
+                sx={{ color: "#FFC300" }}
+              />
+            ) : (
+              <MoonIcon className="icons-fade" fontSize="large" />
+            )}
+          </ModeContainer>
         </div>
       ) : (
-        <p className="processing-text">Processing... <SettingsIcon fontSize="medium" className="animate-settings"/></p>
+        <p className="processing-text">
+          Processing...{" "}
+          <SettingsIcon fontSize="medium" className="animate-settings" />
+        </p>
       )}
     </div>
   );

@@ -40,7 +40,7 @@
   color: whitesmoke;
 }
 
-.flex{
+.flex {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,7 +55,6 @@
   font-size: 2rem;
   font-family: "Raleway", sans-serif;
   font-weight: bold;
-  
 }
 
 .animate-settings {

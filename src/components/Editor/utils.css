@@ -5,6 +5,14 @@ body {
   padding: 0;
 }
 
+.processing-text-video {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+  font-family: "Raleway", sans-serif;
+  font-size: 3rem;
+}
+
 .light-mode {
   background-color: "#F5FFFA";
   color: #071b2f;
@@ -61,6 +69,20 @@ body {
   margin-left: 1em;
   color: limegreen;
   font-weight: bold;
+}
+
+.animate-settings {
+  color: inherit;
+  animation: animate-icon 1s 0.5s infinite ease-out;
+}
+
+@keyframes animate-icon {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .icons-fade {

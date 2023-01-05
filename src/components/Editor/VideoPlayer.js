@@ -29,6 +29,7 @@ import {
   SliderBox,
   SliderContainer,
   ChangeVideoButton,
+  MuteButton,
 } from "./VideoPlayerStyle";
 import ShareIcon from "@mui/icons-material/Share";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
@@ -39,15 +40,20 @@ import TitleOutlinedIcon from "@mui/icons-material/TitleOutlined";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
 import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import SettingsIcon from "@mui/icons-material/Settings";
+import CircularProgress from "@mui/material/CircularProgress";
 import "./utils.css";
 import SuccessAlert from "./SuccessAlert";
+import { CirularIconBox } from "./EditorStyle";
 
 function VideoPlayer() {
-  
-  const [sliderStartValue,setSliderStartValue] = useState(0)
-  const [sliderEndValue,setSliderEndValue] = useState(0)
+  const [sliderStartValue, setSliderStartValue] = useState(0);
+  const [sliderEndValue, setSliderEndValue] = useState(0);
   const [videoDuration, setVideoDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [toggleMergeBox, setToggleMergeBox] = useState(false);
   const [trimA, setTrimA] = useState(0);
   const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
@@ -73,12 +79,11 @@ function VideoPlayer() {
     endValue,
   } = useContext(Context);
 
-
   const handleSliderValues = (sliderValuesArray) => {
     setIsVideoPlaying(false);
     const [startingIndex, endingIndex] = sliderValuesArray;
-    setSliderStartValue(startingIndex)
-    setSliderEndValue(endingIndex)
+    setSliderStartValue(startingIndex);
+    setSliderEndValue(endingIndex);
     // console.log(`${JSON.stringify(startingIndex.toFixed(2))}`);
     setStartValue(startingIndex);
     setEndValue(endingIndex);
@@ -96,6 +101,14 @@ function VideoPlayer() {
     setIsTrimmingDone(false);
   };
 
+  const handleMute = () => {
+    setIsMuted(true);
+  };
+
+  const handleUnMute = () => {
+    setIsMuted(false);
+  };
+
   const handleChangeVideo = () => {
     setUserHasChoosenVideo(false);
     setIsNotLoading(false);
@@ -104,15 +117,19 @@ function VideoPlayer() {
     }, 1000);
   };
 
+  const handleToggleMergeBox = () => {
+    setToggleMergeBox((prevStat) => !prevStat);
+  };
+
   useEffect(() => {
     if (videoRef.current) {
       const duration = videoRef.current.getDuration() || 100;
       setVideoDuration(duration);
       videoRef.current.seekTo(startValue);
       // console.log(`${handleStartValue}, ${handleEndValue}`)
-      if(isTrimmingDone){
-        setTrimA(sliderStartValue)
-        setTrimB(sliderEndValue)
+      if (isTrimmingDone) {
+        setTrimA(sliderStartValue);
+        setTrimB(sliderEndValue);
       }
     }
   });
@@ -147,29 +164,47 @@ function VideoPlayer() {
           </ModeContainer>
         </PublishInviteButtonContainer>
 
-        <VideoContainer>
-          {!isTrimmingDone ? (
-            <ReactPlayer
-              url={choosenVideo}
-              ref={videoRef}
-              width="100%"
-              height={"100%"}
-              controls
-              playing={isVideoPlaying}
-            />
-          ) : (
-            <ReactPlayer
-              url={choosenVideo}
-              ref={trimmingRef}
-              width="100%"
-              height={"100%"}
-              controls
-              playing={isVideoPlaying}
-            />
-          )}
-        </VideoContainer>
+        {isNotloading ? (
+          <VideoContainer>
+            {!isTrimmingDone ? (
+              <ReactPlayer
+                url={choosenVideo}
+                ref={videoRef}
+                width="100%"
+                height={"100%"}
+                controls
+                playing={isVideoPlaying}
+                muted={isMuted}
+              />
+            ) : (
+              <ReactPlayer
+                url={choosenVideo}
+                ref={trimmingRef}
+                width="100%"
+                height={"100%"}
+                controls
+                playing={isVideoPlaying}
+                muted={isMuted}
+              />
+            )}
+          </VideoContainer>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <p className="processing-text-video">
+              Processing...{" "}
+              {/* <SettingsIcon fontSize="medium" className="animate-settings" /> */}
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <CircularProgress
+                sx={{ marginLeft: "5em" }}
+                fontSize="large"
+                color="primary"
+              />
+            </div>
+          </div>
+        )}
 
-        {!isMerged ? (
+        {!isMerged && toggleMergeBox && (
           <div className="merge-container">
             <Alert severity="info" sx={{ width: "100%" }}>
               Merge video ? <strong>choose a file 👇</strong>
@@ -183,10 +218,12 @@ function VideoPlayer() {
               name="merge"
             />
           </div>
-        ) : (
+        )}
+
+        {isMerged && (
           <div className="merge-container">
             <Alert severity="success" sx={{ width: "100%" }}>
-              Video merged Successfully!
+              Video merged Successfully ✔!
             </Alert>
           </div>
         )}
@@ -201,6 +238,15 @@ function VideoPlayer() {
             <ButtonText variant="body2">Change Video</ButtonText>
           </ChangeVideoButton>
 
+          <MergeButton>
+            <PostAddOutlinedIcon
+              onClick={handleToggleMergeBox}
+              fontSize="large"
+              sx={{ color: " #000000" }}
+            />
+            <ButtonText variant="body2">Merge</ButtonText>
+          </MergeButton>
+
           <TextButton>
             <TitleOutlinedIcon fontSize="large" sx={{ color: " #000000" }} />
             <ButtonText variant="body2">Text</ButtonText>
@@ -214,11 +260,6 @@ function VideoPlayer() {
             />
             <ButtonText variant="body2">Trim</ButtonText>
           </TrimButton>
-          {/* 
-          <MergeButton>
-            <PostAddOutlinedIcon fontSize="large" sx={{ color: " #000000" }} />
-            <ButtonText variant="body2">Merge</ButtonText>
-          </MergeButton> */}
 
           <ResetButton>
             <RestartAltOutlinedIcon
@@ -228,24 +269,52 @@ function VideoPlayer() {
             />
             <ButtonText variant="body2">Reset</ButtonText>
           </ResetButton>
+
+          <MuteButton>
+            {!isMuted ? (
+              <VolumeMuteIcon
+                onClick={handleMute}
+                fontSize="large"
+                sx={{ color: " #000000" }}
+              />
+            ) : (
+              <VolumeOffIcon
+                onClick={handleUnMute}
+                fontSize="large"
+                sx={{ color: " #000000" }}
+              />
+            )}
+            <ButtonText variant="body2">Mute</ButtonText>
+          </MuteButton>
         </HelperButtonContainer>
 
         <div>
           {!isTrimmingDone ? (
             <div className="original-video-seconds-container">
               <p className="title">Original Video</p>
-              <span className="time">{`00:${JSON.stringify(startValue).slice(0,3)}`}</span>
+              <span className="time">{`00:${JSON.stringify(startValue).slice(
+                0,
+                3
+              )}`}</span>
               <span>-</span>
-              <span className="time">{`00:${JSON.stringify(endValue).slice(0,3)}`}</span>
+              <span className="time">{`00:${JSON.stringify(endValue).slice(
+                0,
+                3
+              )}`}</span>
             </div>
           ) : (
             <div className="trimmed-video-seconds-container">
               <p className="title">Trimmed Video</p>
-              <span className="time">{`00:${JSON.stringify(sliderStartValue).slice(0,3)}`}</span>
+              <span className="time">{`00:${JSON.stringify(
+                sliderStartValue
+              ).slice(0, 3)}`}</span>
               <span>-</span>
-              <span className="time">{`00:${JSON.stringify(sliderEndValue).slice(0,3)}`}</span>
-              <span className="calculate-trim-seconds">(00:{sliderEndValue - sliderStartValue} seconds)</span>
-
+              <span className="time">{`00:${JSON.stringify(
+                sliderEndValue
+              ).slice(0, 3)}`}</span>
+              <span className="calculate-trim-seconds">
+                (00:{sliderEndValue - sliderStartValue} seconds)
+              </span>
             </div>
           )}
         </div>
