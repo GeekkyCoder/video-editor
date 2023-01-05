@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import ReactPlayer from "react-player";
-import { Context } from "../Context/Context";
+import { Context } from "../../Context/Context";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Alert from "@mui/material/Alert";
@@ -44,10 +44,10 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CircularProgress from "@mui/material/CircularProgress";
-import "./utils.css";
-import SuccessAlert from "./SuccessAlert";
-import { CirularIconBox } from "./EditorStyle";
-import TextDialog from "./TextDialog/TextDialog";
+import "../utils.css";
+import SuccessAlert from "../SuccessAlert/SuccessAlert";
+import { CirularIconBox } from "../Editor/EditorStyle";
+import TextDialog from "../TextDialog/TextDialog";
 
 function VideoPlayer() {
   const [sliderStartValue, setSliderStartValue] = useState(0);
