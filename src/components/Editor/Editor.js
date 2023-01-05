@@ -7,11 +7,10 @@ import { CirularIconBox } from "./EditorStyle";
 import VideoPlayer from "./VideoPlayer";
 
 function Editor() {
-  const { isFFmpegReady,userHasChoosenVideo } = useContext(Context);
+  const { isFFmpegReady, userHasChoosenVideo } = useContext(Context);
   return isFFmpegReady ? (
     <Box>
-    {!userHasChoosenVideo &&  <UploadFileComponent />}
-     { userHasChoosenVideo && <VideoPlayer/>}
+      {!userHasChoosenVideo ? <UploadFileComponent /> : <VideoPlayer />}
     </Box>
   ) : (
     <CirularIconBox>

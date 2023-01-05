@@ -174,6 +174,39 @@ export const MergeButton = styled(`Box`)`
   }
 `;
 
+export const ResetButton = styled(`Box`)` 
+width: 10%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #b0c7f5;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin-left: 1em;
+  &:hover {
+    cursor: pointer;
+    background-color: #b0c7f5;
+  }
+`;
+
+export const ChangeVideoButton = styled(`Box`)`
+ width: 10%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #b0c7f5;
+  border-radius: 5px;
+  padding: 0.5em;
+  margin-left: 1em;
+  &:hover {
+    cursor: pointer;
+    background-color: #b0c7f5;
+  }
+`;
 export const ButtonText = styled(Typography)`
   font-family: "Inter", sans-serif;
   font-size: 0.8rem;
