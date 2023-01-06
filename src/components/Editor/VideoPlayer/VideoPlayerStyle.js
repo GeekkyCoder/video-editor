@@ -18,10 +18,10 @@ export const PublishInviteButtonContainer = styled(Box)`
   margin-left: auto;
   margin-right: 3em;
   @media (max-width: 650px) {
-    width: 100%;
+    width: 60%;
     flex-direction: column;
-    justify-content: center;
-    margin-left: 5em;
+    justify-content: end;
+    margin-left: 8em;
   }
 `;
 export const PublishButtonContainer = styled(Button)`
@@ -35,6 +35,7 @@ export const PublishButtonContainer = styled(Button)`
   }
   border-radius: 10px;
   @media (max-width: 650px) {
+    width: 100%;
     margin-bottom: 1em;
   }
 `;
@@ -51,6 +52,7 @@ export const InviteButtonContainer = styled(Button)`
   }
   border-radius: 10px;
   @media (max-width: 650px) {
+    width: 100%;
     margin-bottom: 1em;
     margin-left: 0;
   }
@@ -103,7 +105,8 @@ export const HelperButtonContainer = styled(Box)`
   align-items: center;
   @media (max-width: 650px) {
     width: 100%;
-    justify-content: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
   }
 `;
 
@@ -122,6 +125,9 @@ export const TextButton = styled(Box)`
     background-color: #b0c7f5;
     cursor: pointer;
   }
+  @media (max-width:650px){
+      width: 15%;
+  }
 `;
 
 export const TrimButton = styled(Box)`
@@ -138,6 +144,10 @@ export const TrimButton = styled(Box)`
   &:hover {
     background-color: #b0c7f5;
     cursor: pointer;
+  }
+  @media (max-width:650px){
+      width: 15%;
+      margin-top: 1em;
   }
 `;
 
@@ -156,6 +166,9 @@ export const DeleteButton = styled(`Box`)`
     background-color: #b0c7f5;
     cursor: pointer;
   }
+  @media (max-width:650px){
+      width: 15%;
+  }
 `;
 export const MergeButton = styled(`Box`)`
   width: 10%;
@@ -171,6 +184,9 @@ export const MergeButton = styled(`Box`)`
   &:hover {
     cursor: pointer;
     background-color: #b0c7f5;
+  }
+  @media (max-width:650px){
+      width: 15%;
   }
 `;
 
@@ -189,6 +205,10 @@ export const ResetButton = styled(`Box`)`
     cursor: pointer;
     background-color: #b0c7f5;
   }
+  @media (max-width:650px){
+      width: 15%;
+      margin-top: 1em;
+  }
 `;
 
 export const ChangeVideoButton = styled(`Box`)`
@@ -206,6 +226,9 @@ export const ChangeVideoButton = styled(`Box`)`
     cursor: pointer;
     background-color: #b0c7f5;
   }
+  @media (max-width:650px){
+      width: 15%;
+  }
 `;
 
 export const MuteButton = styled(`Box`)` 
@@ -222,6 +245,10 @@ export const MuteButton = styled(`Box`)`
   &:hover {
     cursor: pointer;
     background-color: #b0c7f5;
+  }
+  @media (max-width:650px){
+      width: 15%;
+      margin-top: 1em;
   }
 `
 export const ButtonText = styled(Typography)`
@@ -241,15 +268,19 @@ export const SliderContainer = styled(Box)`
   margin-left: auto;
   margin-right: auto;
   width: 80%;
-  @media (max-wwidth: 650px) {
+  @media (max-width: 650px) {
     width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    position: relative;
   }
 `;
 
 export const SliderBox = styled(Box)`
   width: 95%;
   @media (max-width: 650px) {
-    width: 85%;
+    width: 100%;
+    margin-top: 1em;
   }
 `;
 
@@ -261,4 +292,11 @@ export const PlayIcon = styled(PlayArrowIcon)``;
 
 export const PauseIcons = styled(PauseIcon)``;
 
-export const PlayPauseIconContainer = styled(Box)``;
+export const PlayPauseIconContainer = styled(Box)`
+   @media (max-width:650px){
+    position: absolute;
+    top: -3em;
+    left: 7em;
+    margin: 1em 0;
+   }
+`;

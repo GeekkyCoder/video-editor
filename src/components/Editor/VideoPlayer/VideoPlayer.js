@@ -121,6 +121,7 @@ function VideoPlayer() {
   }
 
   const handleChangeVideo = () => {
+    setIsTrimmingDone(false)
     setUserHasChoosenVideo(false);
     setIsNotLoading(false);
     setTimeout(() => {
