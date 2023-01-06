@@ -7,6 +7,9 @@ export const DialogContainer = styled(Box)`
     display: flex;
     flex-direction: column;
     height: 100%;
+    @media (max-width:650px){
+        max-width: 90%;
+    }
 `
 
 export const TextButton = styled(Button)` 
@@ -16,5 +19,8 @@ export const TextButton = styled(Button)`
     border-radius: 10px;
     &:hover{
         background-color: black;
+    }
+    @media (max-width:650px){
+        width: 70%;
     }
 `

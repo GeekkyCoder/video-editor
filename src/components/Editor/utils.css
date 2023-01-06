@@ -6,9 +6,9 @@ body {
 }
 
 .processing-text-video {
-   display: flex;
-   justify-content: center;
-   align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Raleway", sans-serif;
   font-size: 3rem;
 }
@@ -65,7 +65,7 @@ body {
   color: red;
 }
 
-.calculate-trim-seconds{
+.calculate-trim-seconds {
   margin-left: 1em;
   color: limegreen;
   font-weight: bold;
@@ -96,5 +96,28 @@ body {
   }
   to {
     opacity: 1;
+  }
+}
+
+@media (max-width: 650px) {
+  .merge-container {
+    width: 95%;
+  }
+
+  .merge-file-input {
+    margin-left: 3em;
+  }
+
+  .original-video-seconds-container .title,
+  .trimmed-video-seconds-container .title {
+    font-size: 1rem;
+  }
+
+  .trimmed-video-seconds-container .time {
+    display: none;
+  }
+
+  .trimmed-video-seconds-container {
+    justify-content: center;
   }
 }
