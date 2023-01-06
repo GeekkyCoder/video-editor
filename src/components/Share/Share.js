@@ -9,18 +9,17 @@ import {
 
 import "./share.css";
 
-// import React, { useContext } from "react";
-// import { Context } from "../Context/Context";
+
+// The url that we passed as a prop to these buttons is just  youtube link 
+// we first have to convert our video to a valid url so we can post it!
 
 function Share() {
-  // const {choosenVideo} = useContext(Context)
-  // console.log("choosenVideo", choosenVideo)
   return (
     <div className="share-container">
       <div className="socials">
         <FacebookShareButton
           className="facebook-button"
-          url={"https://youtu.be/9WzIACv_mxs"}
+          url={"https://youtu.be/N3AkSS5hXMA"}
           quote="hey bro"
           hashtag="#yt"
         >
@@ -34,7 +33,7 @@ function Share() {
 
         <LinkedinShareButton
           className="linkdein-button"
-          url="https://youtu.be/9WzIACv_mxs"
+          url="https://youtu.be/N3AkSS5hXMA"
         >
           <LinkedinIcon
             className="social-icon"
@@ -46,7 +45,7 @@ function Share() {
 
         <EmailShareButton
           className="email-button"
-          url="https://youtu.be/9WzIACv_mxs"
+          url="https://youtu.be/N3AkSS5hXMA"
         >
           <EmailIcon
             className="social-icon"
