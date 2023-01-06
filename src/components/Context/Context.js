@@ -29,6 +29,11 @@ function ContextProvider(props) {
   const [select,setSelect] = useState()
 
 
+  // Backend Stuff
+  // we need to convert base64 to a valid link which we can share by clicking on publish button  
+  // const [videoUrl,setVideoUrl] = useState("")
+
+
   const setThemeMode = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
@@ -62,7 +67,7 @@ function ContextProvider(props) {
     const dataUrl = await helpers.readFileAsBase64(
       new Blob([data.buffer], { type: "video/mp4" })
     );
-
+    // setVideoUrl(dataUrl)
     setChoosenVideo(dataUrl);
     setIsNotLoading(true);
   };

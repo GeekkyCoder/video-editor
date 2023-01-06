@@ -4,6 +4,7 @@ import { Context } from "../../Context/Context";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import Alert from "@mui/material/Alert";
+import Share from "../../Share/Share";
 
 import {
   VideoEditorContainer,
@@ -59,6 +60,7 @@ function VideoPlayer() {
   const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
   const trimmingRef = useRef(null);
+  const [isPublishButtonHovered,setIsPublishButtonHovered] = useState(false)
 
   const {
     theme,
@@ -116,8 +118,9 @@ function VideoPlayer() {
     setIsOpen(prevStat=> !prevStat)
   };
 
+
   const handleMergeBox = () => {
-     setToggleMergeBox(prevStat=> !prevStat)
+     setToggleMergeBox(prevStat => !prevStat)
   }
 
   const handleChangeVideo = () => {
@@ -128,6 +131,18 @@ function VideoPlayer() {
       setIsNotLoading(true);
     }, 1000);
   };
+
+  const handleMouseEnterPublish = (e) => {
+    e.stopPropagation()
+    setIsPublishButtonHovered(true)
+  }
+
+  const handlePublishClick = (e) => {
+    e.stopPropagation()
+    setIsPublishButtonHovered(prevState=> !prevState)
+  }
+
+
 
 
   useEffect(() => {
@@ -143,12 +158,15 @@ function VideoPlayer() {
     }
   });
 
+  console.log(isPublishButtonHovered)
+
   return (
     <>
       {isTrimmingDone ? <SuccessAlert /> : ""}
+    {isPublishButtonHovered &&  <Share />}
       <VideoEditorContainer className={`${theme}-mode`}>
         <PublishInviteButtonContainer>
-          <PublishButtonContainer>
+          <PublishButtonContainer onMouseEnter={handleMouseEnterPublish} onClick={handlePublishClick}>
             <ShareIcon fontSize="medium" sx={{ color: "#000000" }} />
             <PublishText sx={{ marginLeft: "1em" }} variant="body2">
               Publish

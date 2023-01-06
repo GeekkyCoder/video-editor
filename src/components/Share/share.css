@@ -1,0 +1,20 @@
+.share-container{
+    position: absolute;
+    top: 15%;
+    right: 24%;
+    width: 10%;
+}
+
+.socials{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.facebook-button{
+    
+}
+
+.linkdein-button{
+  /* margin-left: .5em;  */
+}
