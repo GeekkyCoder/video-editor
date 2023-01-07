@@ -404,15 +404,12 @@ function VideoPlayer() {
                 onChange={handleSliderValues}
                 draggableTrack
                 keyboard={true}
-                disabled={isTrimmingDone}
                 pushable
                 allowCross={false}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
-                    background: !isTrimmingDone
-                      ? "linear-gradient(#DBDEF5,blue)"
-                      : "linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)",
+                    background:"linear-gradient(#DBDEF5,blue)",
                     height: "10px",
                   },
                 ]}
