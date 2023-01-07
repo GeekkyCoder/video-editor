@@ -105,7 +105,7 @@ export const HelperButtonContainer = styled(Box)`
   align-items: center;
   @media (max-width: 650px) {
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
   }
 `;
@@ -131,6 +131,7 @@ export const TextButton = styled(Box)`
 `;
 
 export const TrimButton = styled(Box)`
+ position: relative;
   width: 10%;
   display: flex;
   flex-direction: column;
