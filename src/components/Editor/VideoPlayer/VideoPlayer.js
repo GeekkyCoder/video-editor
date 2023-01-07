@@ -23,7 +23,6 @@ import {
   HelperButtonContainer,
   TextButton,
   MergeButton,
-  DeleteButton,
   TrimButton,
   ResetButton,
   ButtonText,
@@ -34,20 +33,16 @@ import {
 } from "./VideoPlayerStyle";
 import ShareIcon from "@mui/icons-material/Share";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ContentCutOutlinedIcon from "@mui/icons-material/ContentCutOutlined";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import TitleOutlinedIcon from "@mui/icons-material/TitleOutlined";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
 import OndemandVideoOutlinedIcon from "@mui/icons-material/OndemandVideoOutlined";
-import ArrowDownwardOutlinedIcon from "@mui/icons-material/ArrowDownwardOutlined";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeMuteIcon from "@mui/icons-material/VolumeMute";
-import SettingsIcon from "@mui/icons-material/Settings";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../utils.css";
 import SuccessAlert from "../SuccessAlert/SuccessAlert";
-import { CirularIconBox } from "../Editor/EditorStyle";
 import TextDialog from "../TextDialog/TextDialog";
 
 function VideoPlayer() {
@@ -56,11 +51,9 @@ function VideoPlayer() {
   const [videoDuration, setVideoDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [toggleMergeBox, setToggleMergeBox] = useState(false);
-  const [trimA, setTrimA] = useState(0);
-  const [trimB, setTrimB] = useState(0);
   const videoRef = useRef(null);
   const trimmingRef = useRef(null);
-  const [isPublishButtonHovered,setIsPublishButtonHovered] = useState(false)
+  const [isPublishButtonHovered, setIsPublishButtonHovered] = useState(false);
 
   const {
     theme,
@@ -81,10 +74,26 @@ function VideoPlayer() {
     isMerged,
     endValue,
     setIsOpen,
-    isOpen
+    isOpen,
+    setIsSliderMovedByUser,
+    isTrimButtonHovered,
+    setIsTrimButtonHovered,
+    isDisableTrimButton,
+    setIsDisableTrimButton,
+    isSliderMoving,
+    setIsSliderMoving,
+    showSuccessAlert,
+    setSuccesAlert,
+    showWarningAlert,
+    setShowWarningAlert
   } = useContext(Context);
 
   const handleSliderValues = (sliderValuesArray) => {
+    setShowWarningAlert(false)
+    setSuccesAlert(true)
+    setIsSliderMoving(true);
+    setIsDisableTrimButton(false);
+    setIsSliderMovedByUser(true);
     setIsVideoPlaying(false);
     const [startingIndex, endingIndex] = sliderValuesArray;
     setSliderStartValue(startingIndex);
@@ -103,6 +112,7 @@ function VideoPlayer() {
   };
 
   const handleReset = () => {
+    setIsSliderMovedByUser(false);
     setIsTrimmingDone(false);
   };
 
@@ -115,16 +125,15 @@ function VideoPlayer() {
   };
 
   const handleToggleText = () => {
-    setIsOpen(prevStat=> !prevStat)
+    setIsOpen((prevStat) => !prevStat);
   };
 
-
   const handleMergeBox = () => {
-     setToggleMergeBox(prevStat => !prevStat)
-  }
+    setToggleMergeBox((prevStat) => !prevStat);
+  };
 
   const handleChangeVideo = () => {
-    setIsTrimmingDone(false)
+    setIsTrimmingDone(false);
     setUserHasChoosenVideo(false);
     setIsNotLoading(false);
     setTimeout(() => {
@@ -133,16 +142,25 @@ function VideoPlayer() {
   };
 
   const handleMouseEnterPublish = (e) => {
-    e.stopPropagation()
-    setIsPublishButtonHovered(true)
-  }
+    e.stopPropagation();
+    setIsPublishButtonHovered(true);
+  };
 
   const handlePublishClick = (e) => {
-    e.stopPropagation()
-    setIsPublishButtonHovered(prevState=> !prevState)
-  }
+    e.stopPropagation();
+    setIsPublishButtonHovered((prevState) => !prevState);
+  };
 
-
+  const handleMouseEntOnTrimButton = () => {
+    if(isDisableTrimButton){
+      setSuccesAlert(false)
+      setShowWarningAlert(true)
+    }else {
+      setShowWarningAlert(false)
+      setSuccesAlert(true)
+    }
+   setIsTrimButtonHovered(true)
+  };
 
 
   useEffect(() => {
@@ -150,23 +168,19 @@ function VideoPlayer() {
       const duration = videoRef.current.getDuration() || 100;
       setVideoDuration(duration);
       videoRef.current.seekTo(startValue);
-      // console.log(`${handleStartValue}, ${handleEndValue}`)
-      if (isTrimmingDone) {
-        setTrimA(sliderStartValue);
-        setTrimB(sliderEndValue);
-      }
     }
   });
-
-  console.log(isPublishButtonHovered)
 
   return (
     <>
       {isTrimmingDone ? <SuccessAlert /> : ""}
-    {isPublishButtonHovered &&  <Share />}
+      {isPublishButtonHovered && <Share />}
       <VideoEditorContainer className={`${theme}-mode`}>
         <PublishInviteButtonContainer>
-          <PublishButtonContainer onMouseEnter={handleMouseEnterPublish} onClick={handlePublishClick}>
+          <PublishButtonContainer
+            onMouseEnter={handleMouseEnterPublish}
+            onClick={handlePublishClick}
+          >
             <ShareIcon fontSize="medium" sx={{ color: "#000000" }} />
             <PublishText sx={{ marginLeft: "1em" }} variant="body2">
               Publish
@@ -219,7 +233,6 @@ function VideoPlayer() {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <p className="processing-text-video">
               Processing...{" "}
-              {/* <SettingsIcon fontSize="medium" className="animate-settings" /> */}
             </p>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <CircularProgress
@@ -233,7 +246,11 @@ function VideoPlayer() {
 
         {!isMerged && toggleMergeBox && (
           <div className="merge-container">
-            <Alert severity="info" sx={{ width: "100%" }}>
+            <Alert
+              className="alert-message"
+              severity="info"
+              sx={{ width: "100%" }}
+            >
               Merge video ? <strong>choose a file 👇</strong>
             </Alert>
             <input
@@ -248,7 +265,11 @@ function VideoPlayer() {
 
         {isMerged && (
           <div className="merge-container">
-            <Alert severity="success" sx={{ width: "100%" }}>
+            <Alert
+              className="alert-message"
+              severity="success"
+              sx={{ width: "100%" }}
+            >
               Video merged Successfully ✔!
             </Alert>
           </div>
@@ -282,7 +303,33 @@ function VideoPlayer() {
             <ButtonText variant="body2">Text</ButtonText>
           </TextButton>
 
-          <TrimButton>
+          <TrimButton
+            sx={{ opacity: isDisableTrimButton ? ".7" : "1" }}
+            onMouseEnter={handleMouseEntOnTrimButton}
+          >
+           {(isSliderMoving || isTrimButtonHovered) && <div className="trim-button-alert">
+               {showWarningAlert && <div>
+                   <Alert
+                    className="alert-message"
+                    severity="warning"
+                    sx={{ width: "100%", zIndex: "1000", position: "relative" }}
+                  >
+                    First Choose the timeframes from slider first to start
+                    trimming!
+                  </Alert>
+                </div>}
+          
+               {showSuccessAlert && <div>
+                 <Alert
+                    className="alert-message"
+                    severity="success"
+                    sx={{ width: "100%", zIndex: "1000", position: "relative" }}
+                  >
+                    You can now trim it!
+                  </Alert>
+                </div>}
+  
+            </div>}
             <ContentCutOutlinedIcon
               onClick={handleTrim}
               fontSize="large"
@@ -404,15 +451,12 @@ function VideoPlayer() {
                 onChange={handleSliderValues}
                 draggableTrack
                 keyboard={true}
-                disabled={isTrimmingDone}
                 pushable
                 allowCross={false}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
-                    background: !isTrimmingDone
-                      ? "linear-gradient(#DBDEF5,blue)"
-                      : "linear-gradient(-180deg, rgba(255,255,255,0.50) 0%, rgba(0,0,0,0.50) 100%)",
+                    background: "linear-gradient(#DBDEF5,blue)",
                     height: "10px",
                   },
                 ]}

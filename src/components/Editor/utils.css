@@ -76,6 +76,18 @@ body {
   animation: animate-icon 1s 0.5s infinite ease-out;
 }
 
+.trim-button-alert{
+  width: 300px;
+   position: absolute;
+   top: -5em;
+}
+
+.trim-button-alert .alert-message,
+.merge-container .alert-message{
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+}
+
 @keyframes animate-icon {
   from {
     transform: rotate(0);
@@ -119,5 +131,10 @@ body {
 
   .trimmed-video-seconds-container {
     justify-content: center;
+  }
+
+  .trim-button-alert{
+    width: 200px;
+    opacity: 1;
   }
 }
