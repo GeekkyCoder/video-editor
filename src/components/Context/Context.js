@@ -24,14 +24,16 @@ function ContextProvider(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [textStartTime, setTextStartTime] = useState();
   const [endTextTime, setEndTextTime] = useState();
-  const [renderTextOnVideo, setRenderTextOnVideo] = useState("hello this is a text");
+  const [renderTextOnVideo, setRenderTextOnVideo] = useState(
+    "hello this is a text"
+  );
   const [select, setSelect] = useState("x=(w-text_w)/2:y=(h-text_h)/2");
-  const [isSliderMovedByUser,setIsSliderMovedByUser] = useState(false)
-  const [isTrimButtonHovered,setIsTrimButtonHovered] = useState(false)
-  const [isDisableTrimButton,setIsDisableTrimButton] = useState(true)
-  const [isSliderMoving, setIsSliderMoving] = useState(false)
-  const [showSuccessAlert,setSuccesAlert] = useState(false)
-  const [showWarningAlert,setShowWarningAlert] = useState(false)
+  const [isSliderMovedByUser, setIsSliderMovedByUser] = useState(false);
+  const [isTrimButtonHovered, setIsTrimButtonHovered] = useState(false);
+  const [isDisableTrimButton, setIsDisableTrimButton] = useState(true);
+  const [isSliderMoving, setIsSliderMoving] = useState(false);
+  const [showSuccessAlert, setSuccesAlert] = useState(false);
+  const [showWarningAlert, setShowWarningAlert] = useState(false);
 
   // Backend Stuff
   // we need to convert base64 to a valid link which we can share by clicking on publish button
@@ -78,7 +80,7 @@ function ContextProvider(props) {
   // trim video functionality
   const handleTrim = async () => {
     // console.log("trimming");
-    if(isSliderMovedByUser){
+    if (isSliderMovedByUser) {
       try {
         await ffmpeg.run(
           "-i",
@@ -93,7 +95,7 @@ function ContextProvider(props) {
           "copy",
           storedVideo2
         );
-  
+
         const data = ffmpeg.FS("readFile", storedVideo2);
         ffmpeg.FS("writeFile", storedVideo, data);
         const dataURL = await helpers.readFileAsBase64(
@@ -106,10 +108,11 @@ function ContextProvider(props) {
         setIsNotLoading(true);
         setIsTrimmingDone(true);
         setIsSliderMovedByUser(false);
-        setSuccesAlert(false)
-        setShowWarningAlert(false)
-        setIsSliderMoving(false)
-        setIsDisableTrimButton(true)
+        setSuccesAlert(false);
+        setShowWarningAlert(false);
+        setIsSliderMoving(false);
+        setIsDisableTrimButton(true);
+
         // setIsDisableTrimButton(true)
       }
     }
@@ -294,7 +297,7 @@ function ContextProvider(props) {
         showSuccessAlert,
         setSuccesAlert,
         showWarningAlert,
-        setShowWarningAlert
+        setShowWarningAlert,
       }}
     >
       {props.children}
