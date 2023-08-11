@@ -85,12 +85,12 @@ function VideoPlayer() {
     showSuccessAlert,
     setSuccesAlert,
     showWarningAlert,
-    setShowWarningAlert
+    setShowWarningAlert,
   } = useContext(Context);
 
   const handleSliderValues = (sliderValuesArray) => {
-    setShowWarningAlert(false)
-    setSuccesAlert(true)
+    setShowWarningAlert(false);
+    setSuccesAlert(true);
     setIsSliderMoving(true);
     setIsDisableTrimButton(false);
     setIsSliderMovedByUser(true);
@@ -152,24 +152,35 @@ function VideoPlayer() {
   };
 
   const handleMouseEntOnTrimButton = () => {
-    if(isDisableTrimButton){
-      setSuccesAlert(false)
-      setShowWarningAlert(true)
-    }else {
-      setShowWarningAlert(false)
-      setSuccesAlert(true)
+    if (isDisableTrimButton) {
+      setSuccesAlert(false);
+      setShowWarningAlert(true);
+    } else {
+      setShowWarningAlert(false);
+      setSuccesAlert(true);
     }
-   setIsTrimButtonHovered(true)
+    setIsTrimButtonHovered(true);
   };
-
 
   useEffect(() => {
     if (videoRef.current) {
       const duration = videoRef.current.getDuration() || 100;
       setVideoDuration(duration);
-      videoRef.current.seekTo(startValue);
+      videoRef.current.seekTo(startValue)
+      videoRef.current.seekTo(endValue);
     }
   });
+
+  useEffect(() => {
+    if (isTrimmingDone && trimmingRef.current) {
+      const trimmedVideoDuration = trimmingRef.current.getDuration() || 100;
+      setVideoDuration(Math.round(Number(trimmedVideoDuration)));
+      trimmingRef.current.seekTo(startValue);
+    }
+  }, [isTrimmingDone, startValue, videoDuration]);
+
+
+  console.log(Math.round(Number(videoDuration)))
 
   return (
     <>
@@ -209,6 +220,7 @@ function VideoPlayer() {
           <VideoContainer>
             {!isTrimmingDone ? (
               <ReactPlayer
+              pip={true}
                 url={choosenVideo}
                 ref={videoRef}
                 width="100%"
@@ -231,9 +243,7 @@ function VideoPlayer() {
           </VideoContainer>
         ) : (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <p className="processing-text-video">
-              Processing...{" "}
-            </p>
+            <p className="processing-text-video">Processing... </p>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <CircularProgress
                 sx={{ marginLeft: "5em" }}
@@ -307,29 +317,42 @@ function VideoPlayer() {
             sx={{ opacity: isDisableTrimButton ? ".7" : "1" }}
             onMouseEnter={handleMouseEntOnTrimButton}
           >
-           {(isSliderMoving || isTrimButtonHovered) && <div className="trim-button-alert">
-               {showWarningAlert && <div>
-                   <Alert
-                    className="alert-message"
-                    severity="warning"
-                    sx={{ width: "100%", zIndex: "1000", position: "relative" }}
-                  >
-                    First Choose the timeframes from slider first to start
-                    trimming!
-                  </Alert>
-                </div>}
-          
-               {showSuccessAlert && <div>
-                 <Alert
-                    className="alert-message"
-                    severity="success"
-                    sx={{ width: "100%", zIndex: "1000", position: "relative" }}
-                  >
-                    You can now trim it!
-                  </Alert>
-                </div>}
-  
-            </div>}
+            {(isSliderMoving || isTrimButtonHovered) && (
+              <div className="trim-button-alert">
+                {showWarningAlert && (
+                  <div>
+                    <Alert
+                      className="alert-message"
+                      severity="warning"
+                      sx={{
+                        width: "100%",
+                        zIndex: "1000",
+                        position: "relative",
+                      }}
+                    >
+                      First Choose the timeframes from slider first to start
+                      trimming!
+                    </Alert>
+                  </div>
+                )}
+
+                {showSuccessAlert && (
+                  <div>
+                    <Alert
+                      className="alert-message"
+                      severity="success"
+                      sx={{
+                        width: "100%",
+                        zIndex: "1000",
+                        position: "relative",
+                      }}
+                    >
+                      You can now trim it!
+                    </Alert>
+                  </div>
+                )}
+              </div>
+            )}
             <ContentCutOutlinedIcon
               onClick={handleTrim}
               fontSize="large"
@@ -419,6 +442,8 @@ function VideoPlayer() {
           <SliderBox>
             {!isTrimmingDone ? (
               <Slider
+              // style={{width: `${videoDuration}px`}}
+              // reverse={true}
                 ariaLabelledByForHandle={() => "range"}
                 autoFocus={true}
                 range
@@ -430,7 +455,7 @@ function VideoPlayer() {
                 draggableTrack
                 keyboard={true}
                 pushable
-                allowCross={false}
+                allowCross={true}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
@@ -442,6 +467,8 @@ function VideoPlayer() {
               />
             ) : (
               <Slider
+              // reverse={true}
+              // style={{width: `${videoDuration}px`}}
                 ariaLabelledByForHandle={() => "range"}
                 autoFocus={true}
                 range
@@ -452,7 +479,7 @@ function VideoPlayer() {
                 draggableTrack
                 keyboard={true}
                 pushable
-                allowCross={false}
+                allowCross={true}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
