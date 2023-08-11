@@ -166,7 +166,8 @@ function VideoPlayer() {
     if (videoRef.current) {
       const duration = videoRef.current.getDuration() || 100;
       setVideoDuration(duration);
-      videoRef.current.seekTo(startValue);
+      videoRef.current.seekTo(startValue)
+      videoRef.current.seekTo(endValue);
     }
   });
 
@@ -178,7 +179,8 @@ function VideoPlayer() {
     }
   }, [isTrimmingDone, startValue, videoDuration]);
 
-  // console.log(Math.round(Number(videoDuration)))
+
+  console.log(Math.round(Number(videoDuration)))
 
   return (
     <>
@@ -218,6 +220,7 @@ function VideoPlayer() {
           <VideoContainer>
             {!isTrimmingDone ? (
               <ReactPlayer
+              pip={true}
                 url={choosenVideo}
                 ref={videoRef}
                 width="100%"
@@ -439,6 +442,8 @@ function VideoPlayer() {
           <SliderBox>
             {!isTrimmingDone ? (
               <Slider
+              // style={{width: `${videoDuration}px`}}
+              // reverse={true}
                 ariaLabelledByForHandle={() => "range"}
                 autoFocus={true}
                 range
@@ -450,7 +455,7 @@ function VideoPlayer() {
                 draggableTrack
                 keyboard={true}
                 pushable
-                allowCross={false}
+                allowCross={true}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
@@ -462,6 +467,8 @@ function VideoPlayer() {
               />
             ) : (
               <Slider
+              // reverse={true}
+              // style={{width: `${videoDuration}px`}}
                 ariaLabelledByForHandle={() => "range"}
                 autoFocus={true}
                 range
@@ -472,7 +479,7 @@ function VideoPlayer() {
                 draggableTrack
                 keyboard={true}
                 pushable
-                allowCross={false}
+                allowCross={true}
                 activeDotStyle={[{ background: "blue" }]}
                 trackStyle={[
                   {
